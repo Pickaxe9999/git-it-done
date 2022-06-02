@@ -1,5 +1,6 @@
 var issueContainerEl = document.querySelector("#issues-container");
 var limitWarningEl = document.querySelector("#limit-warning");
+var repoNameEl = document.querySelector("#repo-name");
 
 
 var getRepoIssues = function(repo){
@@ -17,7 +18,8 @@ var getRepoIssues = function(repo){
                 }
             })
         }else{
-            alert("There was a problem with your request");
+            // if not successful, redirect to homepage TLDR if a repo is input that doesn't exist then it redirects back to the hompage
+            document.location.replace("./index.html");
         }
     })
 }
@@ -73,4 +75,23 @@ var displayWarning = function(repo){
     limitWarningEl.appendChild(linkEl);
 }
 
-getRepoIssues("facebook/react");
+var getRepoName = function(){
+    //grab the repo name from the url query string
+    var queryString = document.location.search;
+    var repoName = queryString.split("=")[1];
+
+    if(repoName){
+        //pass in the repo user/repo-name string so getRepoIssues can fetch the repos issues
+        getRepoIssues(repoName);
+
+        //display the repo name on the page
+        repoNameEl.textContent = repoName;
+    }else{
+        //if no rpeo was given, redirect back to the home page
+        document.location.replace("./index.html");
+    }
+    
+    
+}
+
+getRepoName();
